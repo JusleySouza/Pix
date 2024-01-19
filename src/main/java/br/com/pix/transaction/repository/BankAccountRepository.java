@@ -8,6 +8,8 @@ import br.com.pix.transaction.model.BankAccount;
 
 public interface BankAccountRepository extends JpaRepository<BankAccount, UUID> {
 	
+	BankAccount findByAccountAndActiveTrue(String account);
+	
 	BankAccount findByDocumentAndActiveTrue(String document);
 	
 	BankAccount findByEmailAndActiveTrue(String email);
