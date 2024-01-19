@@ -12,4 +12,6 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, UUID> 
 	
 	BankAccount findByEmailAndActiveTrue(String email);
 	
+	BankAccount findByPhoneAndActiveTrue(String phone);
+	
 }
