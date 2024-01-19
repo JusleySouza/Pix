@@ -45,6 +45,8 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		
 		duplicateEmailValidator(bankAccount);
 		
+		duplicatePhoneValidator(bankAccount);
+		
 		repository.save(bankAccount);
 		
 		LoggerConfig.LOGGER_BANK_ACCOUNT.info("Bank account salved successfully!");
@@ -67,6 +69,15 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		if(emailEntity != null) {
 			throw new ValidationException("Unable to register bank account."
 					+ " There is already a customer registered with this email. Please check and try again.");	
+		}
+	}
+	
+	private void duplicatePhoneValidator( BankAccount bankAccount) {
+		BankAccount phoneEntity = repository.findByPhoneAndActiveTrue(bankAccount.getPhone());
+		
+		if(phoneEntity != null) {
+			throw new ValidationException("Unable to register bank account."
+					+ " There is already a customer registered with this phone. Please check and try again.");	
 		}
 	}
 
