@@ -31,13 +31,13 @@ public class BankAccount {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(updatable = false, nullable = false)
+	@Column(updatable = false, nullable = false, unique = true)
 	private UUID id;
 	@Column(nullable = false)
 	private String fullName;
 	@Column(nullable = false)
 	private String agency;
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String account;
 	@Column(nullable = false)
 	@Enumerated
