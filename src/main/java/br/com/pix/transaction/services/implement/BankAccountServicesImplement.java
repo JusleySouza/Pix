@@ -43,11 +43,7 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		
 		duplicateAccountValidator(bankAccount);
 		
-		duplicateDocumentValidator(bankAccount);
-		
-		duplicateEmailValidator(bankAccount);
-		
-		duplicatePhoneValidator(bankAccount);
+		duplicatePixKeysValidator(bankAccount);
 		
 		repository.save(bankAccount);
 		
@@ -66,30 +62,12 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		}
 	}
 	
-	private void duplicateDocumentValidator( BankAccount bankAccount) {
-		BankAccount documentEntity = repository.findByDocumentAndActiveTrue(bankAccount.getDocument());
+	private void duplicatePixKeysValidator( BankAccount bankAccount) {
+		BankAccount keysEntity = repository.findByDocumentOrEmailOrPhoneAndActiveTrue(bankAccount.getDocument(), bankAccount.getEmail(), bankAccount.getPhone());
 		
-		if(documentEntity != null) {
+		if(keysEntity != null) {
 			throw new DuplicateDocumentsException("Unable to register bank account."
-					+ " There is already a customer registered with this document. Please check and try again.");	
-		}
-	}
-	
-	private void duplicateEmailValidator( BankAccount bankAccount) {
-		BankAccount emailEntity = repository.findByEmailAndActiveTrue(bankAccount.getEmail());
-		
-		if(emailEntity != null) {
-			throw new ValidationException("Unable to register bank account."
-					+ " There is already a customer registered with this email. Please check and try again.");	
-		}
-	}
-	
-	private void duplicatePhoneValidator( BankAccount bankAccount) {
-		BankAccount phoneEntity = repository.findByPhoneAndActiveTrue(bankAccount.getPhone());
-		
-		if(phoneEntity != null) {
-			throw new ValidationException("Unable to register bank account."
-					+ " There is already a customer registered with this phone. Please check and try again.");	
+					+ " There is already a customer registered with this pix key. Please check the document, email or phone number and try again.");	
 		}
 	}
 
