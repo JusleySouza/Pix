@@ -10,10 +10,6 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, UUID> 
 	
 	BankAccount findByAccountAndActiveTrue(String account);
 	
-	BankAccount findByDocumentAndActiveTrue(String document);
-	
-	BankAccount findByEmailAndActiveTrue(String email);
-	
-	BankAccount findByPhoneAndActiveTrue(String phone);
+	BankAccount findByDocumentOrEmailOrPhoneAndActiveTrue(String document, String email, String phone);
 	
 }
