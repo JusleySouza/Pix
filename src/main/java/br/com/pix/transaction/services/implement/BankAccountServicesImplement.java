@@ -41,6 +41,8 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		
 		bankAccount = BankAccountMapper.toModel(requestBankAccountDTO);
 		
+		duplicateAccountValidator(bankAccount);
+		
 		duplicateDocumentValidator(bankAccount);
 		
 		duplicateEmailValidator(bankAccount);
@@ -52,6 +54,16 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		LoggerConfig.LOGGER_BANK_ACCOUNT.info("Bank account salved successfully!");
 		
 		return new ResponseEntity<Object>(HttpStatus.CREATED);
+	}
+	
+	
+	private void duplicateAccountValidator( BankAccount bankAccount) {
+		BankAccount accountEntity = repository.findByAccountAndActiveTrue(bankAccount.getAccount());
+		
+		if(accountEntity != null) {
+			throw new ValidationException("Unable to register bank account."
+					+ " There is already a customer registered with this account. Please check and try again.");	
+		}
 	}
 	
 	private void duplicateDocumentValidator( BankAccount bankAccount) {
