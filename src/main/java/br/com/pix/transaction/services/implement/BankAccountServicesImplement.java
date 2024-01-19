@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import br.com.pix.transaction.config.LoggerConfig;
+import br.com.pix.transaction.exception.DuplicateDocumentsException;
 import br.com.pix.transaction.mapper.BankAccountMapper;
 import br.com.pix.transaction.model.BankAccount;
 import br.com.pix.transaction.model.dto.RequestBankAccountDTO;
@@ -36,9 +37,25 @@ public class BankAccountServicesImplement implements BankAccountServices {
 			LoggerConfig.LOGGER_BANK_ACCOUNT.error("Validation error!");
 			return new ResponseEntity<Object>(ResponseError.createFromValidations(violations), HttpStatus.UNPROCESSABLE_ENTITY);
 		}
+		
 		bankAccount = BankAccountMapper.toModel(requestBankAccountDTO);
+		
+		duplicateDocumentValidator(bankAccount);
+		
 		repository.save(bankAccount);
+		
+		LoggerConfig.LOGGER_BANK_ACCOUNT.info("Bank account salved successfully!");
+		
 		return new ResponseEntity<Object>(HttpStatus.CREATED);
+	}
+	
+	private void duplicateDocumentValidator( BankAccount bankAccount) {
+		BankAccount documentEntity = repository.findByDocumentAndActiveTrue(bankAccount.getDocument());
+		
+		if(documentEntity != null) {
+			throw new DuplicateDocumentsException("Unable to register bank account."
+					+ " There is already a customer registered with this document. Please check and try again.");	
+		}
 	}
 
 }
