@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import br.com.pix.transaction.model.BankAccount;
 import br.com.pix.transaction.model.dto.RequestBankAccountDTO;
+import br.com.pix.transaction.model.dto.ResponseBankAccountDTO;
 
 public class BankAccountMapper {
 	
@@ -21,5 +22,16 @@ public class BankAccountMapper {
 				.active(Boolean.TRUE)
 				.build();
 	}
-		
+	
+	public static ResponseBankAccountDTO modelToResponseBankAccountDTO(BankAccount bankAccount) {
+		return ResponseBankAccountDTO.builder()
+				.id(bankAccount.getId())
+				.fullName(bankAccount.getFullName())
+				.agency(bankAccount.getAgency())
+				.account(bankAccount.getAccount())
+				.type(bankAccount.getType())
+				.bankBalance(bankAccount.getBankBalance())
+				.build();
+	}
+	
 }
