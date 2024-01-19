@@ -1,5 +1,7 @@
 package br.com.pix.transaction.services.implement;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import br.com.pix.transaction.exception.ValidationException;
 import br.com.pix.transaction.mapper.BankAccountMapper;
 import br.com.pix.transaction.model.BankAccount;
 import br.com.pix.transaction.model.dto.RequestBankAccountDTO;
+import br.com.pix.transaction.model.dto.ResponseBankAccountDTO;
 import br.com.pix.transaction.model.dto.error.ResponseError;
 import br.com.pix.transaction.repository.BankAccountRepository;
 import br.com.pix.transaction.services.BankAccountServices;
@@ -29,6 +32,9 @@ public class BankAccountServicesImplement implements BankAccountServices {
 	private Validator validator;
 	
 	private BankAccount bankAccount;
+	private ResponseBankAccountDTO responseBankAccountDTO;
+	private List<BankAccount> listBankAccount;
+	private List<ResponseBankAccountDTO> listResponse;
 
 	@Override
 	public ResponseEntity<Object> create(RequestBankAccountDTO requestBankAccountDTO) {
@@ -52,6 +58,18 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		return new ResponseEntity<Object>(HttpStatus.CREATED);
 	}
 	
+	@Override
+	public List<ResponseBankAccountDTO> findAll() {
+		listResponse = new ArrayList<>();
+		listBankAccount = repository.findAllByActiveTrue();
+		
+		for (BankAccount bankAccount : listBankAccount) {
+			responseBankAccountDTO = BankAccountMapper.modelToResponseBankAccountDTO(bankAccount);
+			listResponse.add(responseBankAccountDTO);
+		}
+		LoggerConfig.LOGGER_BANK_ACCOUNT.info("Bank account list successfully executed!");
+		return listResponse;
+	}
 	
 	private void duplicateAccountValidator( BankAccount bankAccount) {
 		BankAccount accountEntity = repository.findByAccountAndActiveTrue(bankAccount.getAccount());
