@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.pix.transaction.config.LoggerConfig;
 import br.com.pix.transaction.exception.DuplicateDocumentsException;
+import br.com.pix.transaction.exception.ValidationException;
 import br.com.pix.transaction.mapper.BankAccountMapper;
 import br.com.pix.transaction.model.BankAccount;
 import br.com.pix.transaction.model.dto.RequestBankAccountDTO;
@@ -42,6 +43,8 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		
 		duplicateDocumentValidator(bankAccount);
 		
+		duplicateEmailValidator(bankAccount);
+		
 		repository.save(bankAccount);
 		
 		LoggerConfig.LOGGER_BANK_ACCOUNT.info("Bank account salved successfully!");
@@ -55,6 +58,15 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		if(documentEntity != null) {
 			throw new DuplicateDocumentsException("Unable to register bank account."
 					+ " There is already a customer registered with this document. Please check and try again.");	
+		}
+	}
+	
+	private void duplicateEmailValidator( BankAccount bankAccount) {
+		BankAccount emailEntity = repository.findByEmailAndActiveTrue(bankAccount.getEmail());
+		
+		if(emailEntity != null) {
+			throw new ValidationException("Unable to register bank account."
+					+ " There is already a customer registered with this email. Please check and try again.");	
 		}
 	}
 
