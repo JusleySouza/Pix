@@ -40,4 +40,10 @@ public class BankAccountMapper {
 		return bankAccount;
 	}
 	
+	public static BankAccount reactivateBankAccount(BankAccount bankAccount) {
+		bankAccount.setActive(Boolean.TRUE);
+		bankAccount.setChanged(LocalDate.now());
+		return bankAccount;
+	}
+	
 }
