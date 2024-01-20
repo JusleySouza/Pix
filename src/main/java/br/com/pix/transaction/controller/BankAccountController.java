@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,12 @@ public class BankAccountController {
 	@DeleteMapping("/{accountId}")
 	public ResponseEntity<Object> delete(@PathVariable("accountId") UUID accountId){
 		services.delete(accountId);
+		return new ResponseEntity<Object>( HttpStatus.NO_CONTENT);
+	}
+	
+	@PatchMapping("/{accountId}")
+	public ResponseEntity<Object> reactivate(@PathVariable("accountId") UUID accountId){
+		services.reactivateAccount(accountId);
 		return new ResponseEntity<Object>( HttpStatus.NO_CONTENT);
 	}
 	
