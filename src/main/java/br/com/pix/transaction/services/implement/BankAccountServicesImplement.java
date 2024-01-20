@@ -3,6 +3,7 @@ package br.com.pix.transaction.services.implement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.pix.transaction.config.LoggerConfig;
 import br.com.pix.transaction.exception.DuplicateDocumentsException;
+import br.com.pix.transaction.exception.ResourceNotFoundException;
 import br.com.pix.transaction.exception.ValidationException;
 import br.com.pix.transaction.mapper.BankAccountMapper;
 import br.com.pix.transaction.model.BankAccount;
@@ -70,6 +72,25 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		LoggerConfig.LOGGER_BANK_ACCOUNT.info("Bank account list successfully executed!");
 		return listResponse;
 	}
+	
+	@Override
+	public BankAccount delete(UUID accountId) {
+		bankAccount = repository.findById(accountId).orElseThrow(() ->
+			new ResourceNotFoundException("Sorry, we could not find a account with this id. Check and try again.")
+		);
+	
+		if(bankAccount.getActive() == Boolean.FALSE) {
+			throw new ValidationException("This account is already deactivated.");
+		}
+	
+		bankAccount = BankAccountMapper.deleteBankAccount(bankAccount);
+		repository.save(bankAccount);
+	
+		LoggerConfig.LOGGER_BANK_ACCOUNT.info("Bank account data " + bankAccount.getFullName() + " deleted successfully!");
+		return bankAccount;
+	}
+	
+	
 	
 	private void duplicateAccountValidator( BankAccount bankAccount) {
 		BankAccount accountEntity = repository.findByAccountAndActiveTrue(bankAccount.getAccount());
