@@ -15,4 +15,6 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, UUID> 
 	
 	List<BankAccount> findAllByActiveTrue();
 	
+	List<BankAccount> findAllByActiveFalse();
+	
 }
