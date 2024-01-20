@@ -36,6 +36,11 @@ public class BankAccountController {
 		return new ResponseEntity<List<ResponseBankAccountDTO>>(services.findAll(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/list/inactive")
+	public ResponseEntity<List<ResponseBankAccountDTO>> findAllInactive(){
+		return new ResponseEntity<List<ResponseBankAccountDTO>>(services.findAllInactive(), HttpStatus.OK);
+	}
+	
 	@DeleteMapping("/{accountId}")
 	public ResponseEntity<Object> delete(@PathVariable("accountId") UUID accountId){
 		services.delete(accountId);
