@@ -34,4 +34,10 @@ public class BankAccountMapper {
 				.build();
 	}
 	
+	public static BankAccount deleteBankAccount(BankAccount bankAccount) {
+		bankAccount.setActive(Boolean.FALSE);
+		bankAccount.setChanged(LocalDate.now());
+		return bankAccount;
+	}
+	
 }
