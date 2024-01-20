@@ -18,5 +18,7 @@ public interface BankAccountServices {
 	public List<ResponseBankAccountDTO>findAll();
 	
 	public BankAccount delete(UUID accountId);
+	
+	public ResponseEntity<ResponseBankAccountDTO> reactivateAccount(UUID accountId);
 
 }
