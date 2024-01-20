@@ -106,6 +106,19 @@ public class BankAccountServicesImplement implements BankAccountServices {
 		LoggerConfig.LOGGER_BANK_ACCOUNT.info("Bank account data " + bankAccount.getFullName() + " reactivated successfully!");
 		return new ResponseEntity<ResponseBankAccountDTO>(HttpStatus.NO_CONTENT);
 	}
+	
+	@Override
+	public List<ResponseBankAccountDTO> findAllInactive() {
+		listResponse = new ArrayList<>();
+		listBankAccount = repository.findAllByActiveFalse();
+
+		for (BankAccount bankAccount : listBankAccount) {
+			responseBankAccountDTO = BankAccountMapper.modelToResponseBankAccountDTO(bankAccount);
+			listResponse.add(responseBankAccountDTO);
+		}
+		LoggerConfig.LOGGER_BANK_ACCOUNT.info("List of inactive bank accounts executed successfully!");
+		return listResponse;
+	}
 
 	
 	private void duplicateAccountValidator(BankAccount bankAccount) {
